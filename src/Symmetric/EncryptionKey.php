@@ -17,7 +17,9 @@ final class EncryptionKey extends SecretKey
      */
     public function __construct(string $keyMaterial = '')
     {
-        if (CryptoUtil::safeStrlen($keyMaterial) !== \Sodium\CRYPTO_STREAM_KEYBYTES) {
+        // allow long keys for symmetric encryption 
+        // (temporary; for compatibility with legacy keys)
+        if (CryptoUtil::safeStrlen($keyMaterial) < \Sodium\CRYPTO_STREAM_KEYBYTES) {
             throw new InvalidKey(
                 'Encryption key must be CRYPTO_STREAM_KEYBYTES bytes long'
             );
